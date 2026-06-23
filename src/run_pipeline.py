@@ -1,9 +1,9 @@
 from create_datasets import create_datasets
-from ingest import ingest_csvs
+from ingest_csv import ingest_csv
 
 def main():
     create_datasets()
-    ingest_csvs()
+    ingest_csv()
 
 if __name__ == "__main__":
     main()

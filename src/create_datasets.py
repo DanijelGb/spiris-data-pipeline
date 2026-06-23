@@ -1,18 +1,23 @@
 from google.cloud import bigquery
 
-client = bigquery.Client()
+from config import PROJECT_ID
 
-datasets = ["staging", "analytics"]
+client = bigquery.Client(project=PROJECT_ID)
 
-for dataset_name in datasets:
-    dataset_id = f"{client.project}.{dataset_name}"
+DATASETS = ["raw", "analytics"]
 
-    dataset = bigquery.Dataset(dataset_id)
-    dataset.location = "EU"
 
-    dataset = client.create_dataset(
-        dataset,
-        exists_ok=True
-    )
+def create_datasets() -> None:
+    for dataset_name in DATASETS:
+        dataset_id = f"{client.project}.{dataset_name}"
 
-    print(f"Dataset {dataset_id} ready")
+        dataset = bigquery.Dataset(dataset_id)
+        dataset.location = "EU"
+
+        client.create_dataset(dataset, exists_ok=True)
+
+        print(f"Dataset {dataset_id} ready")
+
+
+if __name__ == "__main__":
+    create_datasets()
