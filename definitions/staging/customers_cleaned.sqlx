@@ -19,7 +19,7 @@ config {
 SELECT
     CAST(TRIM(customer_id) AS STRING)                AS customer_id,
     NULLIF(TRIM(country), '')                        AS country,
-    SAFE.PARSE_DATE('%Y-%m-%d', signup_date)   AS signup_date,
+    SAFE_CAST(signup_date AS DATE)   AS signup_date,
     loaded_at
 FROM
     ${ref("customers")}
