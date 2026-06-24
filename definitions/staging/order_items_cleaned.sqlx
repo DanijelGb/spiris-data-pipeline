@@ -16,7 +16,6 @@ config {
         product_id: "Product reference (FK -> products_cleaned).",
         quantity: "Quantity ordered; integer, always > 0.",
         price_per_unit: "Unit price as NUMERIC (decimal), always > 0.",
-        loaded_at: "UTC timestamp when the row was loaded into raw.",
     },
 }
 
@@ -24,8 +23,7 @@ SELECT
     CAST(TRIM(order_id) AS STRING)        AS order_id,
     CAST(TRIM(product_id) AS STRING)      AS product_id,
     CAST(quantity AS INT64)               AS quantity,
-    CAST(price_per_unit AS NUMERIC)       AS price_per_unit,
-    loaded_at
+    CAST(price_per_unit AS NUMERIC)       AS price_per_unit
 FROM
     ${ref("order_items")}
 WHERE

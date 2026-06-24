@@ -13,7 +13,6 @@ config {
         customer_id: "Customer reference (FK -> customers_cleaned).",
         order_timestamp: "Order time in UTC; NULL when unparseable.",
         order_status: "Lowercased status: completed / cancelled / refunded; NULL if unrecognized.",
-        loaded_at: "UTC timestamp when the row was loaded into raw.",
     },
 }
 
@@ -25,8 +24,7 @@ SELECT
         WHEN LOWER(TRIM(order_status)) IN ('completed', 'cancelled', 'refunded')
             THEN LOWER(TRIM(order_status))
         ELSE NULL
-    END AS order_status,
-    loaded_at
+    END AS order_status
 FROM
     ${ref("orders")}
 WHERE

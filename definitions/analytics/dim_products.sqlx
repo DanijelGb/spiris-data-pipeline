@@ -8,14 +8,12 @@ config {
         product_id: "Product natural key (primary key).",
         category: "Product category.",
         product_name: "Product display name.",
-        loaded_at: "UTC timestamp when the source row was loaded into raw.",
     },
 }
 
 SELECT
     product_id,
     category,
-    product_name,
-    loaded_at
+    product_name
 FROM
     ${ref("products_cleaned")}

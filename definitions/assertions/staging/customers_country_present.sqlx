@@ -8,8 +8,7 @@ config {
 -- making the gap visible without mutating the data.
 SELECT
     customer_id,
-    signup_date,
-    loaded_at
+    signup_date
 FROM
     ${ref("customers_cleaned")}
 WHERE

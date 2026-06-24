@@ -8,8 +8,7 @@ config {
 -- The assertion passes only when this set is empty.
 SELECT
     oi.order_id,
-    oi.product_id,
-    oi.loaded_at
+    oi.product_id
 FROM
     ${ref("order_items_cleaned")} AS oi
 LEFT JOIN

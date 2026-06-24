@@ -9,8 +9,7 @@ config {
 SELECT
     o.order_id,
     o.customer_id,
-    o.order_timestamp,
-    o.loaded_at
+    o.order_timestamp
 FROM
     ${ref("orders_cleaned")} AS o
 LEFT JOIN

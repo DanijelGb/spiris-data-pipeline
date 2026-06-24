@@ -9,7 +9,6 @@ config {
         total_revenue: "Total revenue from completed orders.",
         total_orders: "Number of distinct completed orders.",
         average_order_value: "total_revenue divided by total_orders.",
-        loaded_at: "Most recent raw load timestamp across the source rows.",
     },
 }
 
@@ -17,8 +16,7 @@ SELECT
     f.order_date                                       AS date,
     SUM(f.line_amount)                                 AS total_revenue,
     COUNT(DISTINCT f.order_id)                         AS total_orders,
-    SUM(f.line_amount) / COUNT(DISTINCT f.order_id)    AS average_order_value,
-    MAX(f.loaded_at)                                   AS loaded_at
+    SUM(f.line_amount) / COUNT(DISTINCT f.order_id)    AS average_order_value
 FROM
     ${ref("fact_order_items")} AS f
 WHERE

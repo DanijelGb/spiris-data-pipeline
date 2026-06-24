@@ -12,15 +12,13 @@ config {
         product_id: "Unique product identifier (primary key).",
         category: "Product category.",
         product_name: "Product display name.",
-        loaded_at: "UTC timestamp when the row was loaded into raw.",
     },
 }
 
 SELECT
     CAST(TRIM(product_id) AS STRING)   AS product_id,
     NULLIF(TRIM(category), '')         AS category,
-    NULLIF(TRIM(product_name), '')     AS product_name,
-    loaded_at
+    NULLIF(TRIM(product_name), '')     AS product_name
 FROM
     ${ref("products")}
 WHERE

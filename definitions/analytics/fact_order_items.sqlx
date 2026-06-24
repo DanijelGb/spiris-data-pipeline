@@ -14,7 +14,6 @@ config {
         quantity: "Quantity ordered (> 0).",
         price_per_unit: "Unit price (NUMERIC).",
         line_amount: "quantity * price_per_unit.",
-        loaded_at: "UTC timestamp when the source row was loaded into raw.",
     },
 }
 
@@ -27,8 +26,7 @@ SELECT
     o.order_status,
     oi.quantity,
     oi.price_per_unit,
-    oi.quantity * oi.price_per_unit    AS line_amount,
-    oi.loaded_at
+    oi.quantity * oi.price_per_unit    AS line_amount
 FROM
     ${ref("order_items_cleaned")} AS oi
 LEFT JOIN

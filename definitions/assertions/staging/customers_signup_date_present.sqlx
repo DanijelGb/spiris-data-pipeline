@@ -7,8 +7,7 @@ config {
 -- Returns customers missing a signup_date; the assertion fails while any exist.
 SELECT
     customer_id,
-    country,
-    loaded_at
+    country
 FROM
     ${ref("customers_cleaned")}
 WHERE

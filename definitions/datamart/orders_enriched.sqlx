@@ -11,7 +11,6 @@ config {
         country: "Customer country (joined from dim_customers; NULL if unknown).",
         order_total_amount: "Sum of quantity * price_per_unit across the order's line items.",
         number_of_items: "Count of line items in the order.",
-        loaded_at: "Most recent raw load timestamp across the order's source rows.",
     },
 }
 
@@ -21,8 +20,7 @@ SELECT
     f.customer_id,
     c.country,
     SUM(f.line_amount) AS order_total_amount,
-    COUNT(*)           AS number_of_items,
-    MAX(f.loaded_at)   AS loaded_at
+    COUNT(*)           AS number_of_items
 FROM
     ${ref("fact_order_items")} AS f
 LEFT JOIN

@@ -8,8 +8,7 @@ config {
 SELECT
     order_id,
     customer_id,
-    order_status,
-    loaded_at
+    order_status
 FROM
     ${ref("orders_cleaned")}
 WHERE
