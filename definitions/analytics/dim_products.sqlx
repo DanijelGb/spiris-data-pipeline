@@ -1,0 +1,25 @@
+config {
+    type: "table",
+    schema: "analytics",
+    tags: ["analytics"],
+    assertions: {
+        uniqueKey: ["product_id"],
+        nonNull: ["product_id"],
+    },
+    table: "dim_products",
+    description: "Product dimension (one row per product).",
+    columns: {
+        product_id: "Product natural key (primary key).",
+        category: "Product category.",
+        product_name: "Product display name.",
+        loaded_at: "UTC timestamp when the source row was loaded into raw.",
+    },
+}
+
+SELECT
+    product_id,
+    category,
+    product_name,
+    loaded_at
+FROM
+    ${ref("products_cleaned")}

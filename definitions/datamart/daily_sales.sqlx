@@ -1,0 +1,28 @@
+config {
+    type: "table",
+    schema: "datamart",
+    tags: ["datamart"],
+    table: "daily_sales",
+    description: "One row per calendar day (UTC) for completed orders: revenue, order count, and average order value.",
+    columns: {
+        date: "Order date (UTC).",
+        total_revenue: "Total revenue from completed orders.",
+        total_orders: "Number of distinct completed orders.",
+        average_order_value: "total_revenue divided by total_orders.",
+        loaded_at: "Most recent raw load timestamp across the source rows.",
+    },
+}
+
+SELECT
+    f.order_date                                       AS date,
+    SUM(f.line_amount)                                 AS total_revenue,
+    COUNT(DISTINCT f.order_id)                         AS total_orders,
+    SUM(f.line_amount) / COUNT(DISTINCT f.order_id)    AS average_order_value,
+    MAX(f.loaded_at)                                   AS loaded_at
+FROM
+    ${ref("fact_order_items")} AS f
+WHERE
+    f.order_status = 'completed'
+    AND f.order_date IS NOT NULL
+GROUP BY
+    f.order_date

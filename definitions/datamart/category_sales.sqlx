@@ -1,0 +1,27 @@
+config {
+    type: "table",
+    schema: "datamart",
+    tags: ["datamart"],
+    table: "category_sales",
+    description: "One row per product category for completed orders: revenue and quantity sold.",
+    columns: {
+        category: "Product category.",
+        total_revenue: "Total revenue from completed orders for the category.",
+        total_quantity_sold: "Total units sold in completed orders for the category.",
+        loaded_at: "Most recent raw load timestamp across the source rows.",
+    },
+}
+
+SELECT
+    p.category,
+    SUM(f.line_amount) AS total_revenue,
+    SUM(f.quantity)    AS total_quantity_sold,
+    MAX(f.loaded_at)   AS loaded_at
+FROM
+    ${ref("fact_order_items")} AS f
+JOIN
+    ${ref("dim_products")} AS p ON p.product_id = f.product_id
+WHERE
+    f.order_status = 'completed'
+GROUP BY
+    p.category

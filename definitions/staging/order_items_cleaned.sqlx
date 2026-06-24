@@ -1,0 +1,35 @@
+config {
+    type: "table",
+    schema: "staging",
+    tags: ["staging"],
+    assertions: {
+        nonNull: ["order_id", "product_id", "quantity", "price_per_unit"],
+        rowConditions: [
+            "quantity > 0",
+            "price_per_unit > 0",
+        ],
+    },
+    table: "order_items_cleaned",
+    description: "Cleaned order items: typed columns, invalid quantities (<= 0) removed.",
+    columns: {
+        order_id: "Order reference (FK -> orders_cleaned).",
+        product_id: "Product reference (FK -> products_cleaned).",
+        quantity: "Quantity ordered; integer, always > 0.",
+        price_per_unit: "Unit price as NUMERIC (decimal), always > 0.",
+        loaded_at: "UTC timestamp when the row was loaded into raw.",
+    },
+}
+
+SELECT
+    CAST(TRIM(order_id) AS STRING)        AS order_id,
+    CAST(TRIM(product_id) AS STRING)      AS product_id,
+    CAST(quantity AS INT64)               AS quantity,
+    CAST(price_per_unit AS NUMERIC)       AS price_per_unit,
+    loaded_at
+FROM
+    ${ref("order_items")}
+WHERE
+    order_id IS NOT NULL
+    AND product_id IS NOT NULL
+    AND SAFE_CAST(quantity AS INT64) > 0
+    AND SAFE_CAST(price_per_unit as NUMERIC) > 0
