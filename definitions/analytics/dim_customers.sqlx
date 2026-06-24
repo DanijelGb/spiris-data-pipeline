@@ -1,0 +1,21 @@
+config {
+    type: "table",
+    schema: "analytics",
+    tags: ["analytics"],
+    table: "dim_customers",
+    description: "Customer dimension (one row per customer).",
+    columns: {
+        customer_id: "Customer natural key (primary key).",
+        country: "Customer country; NULL if unknown.",
+        signup_date: "Signup date.",
+        loaded_at: "UTC timestamp when the source row was loaded into raw.",
+    },
+}
+
+SELECT
+    customer_id,
+    country,
+    signup_date,
+    loaded_at
+FROM
+    ${ref("customers_cleaned")}

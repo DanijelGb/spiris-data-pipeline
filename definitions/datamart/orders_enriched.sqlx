@@ -1,0 +1,34 @@
+config {
+    type: "table",
+    schema: "datamart",
+    tags: ["datamart"],
+    table: "orders_enriched",
+    description: "One row per order, enriched with customer country and order-level metrics.",
+    columns: {
+        order_id: "Unique order identifier.",
+        order_timestamp: "Order time in UTC.",
+        customer_id: "Customer reference.",
+        country: "Customer country (joined from dim_customers; NULL if unknown).",
+        order_total_amount: "Sum of quantity * price_per_unit across the order's line items.",
+        number_of_items: "Count of line items in the order.",
+        loaded_at: "Most recent raw load timestamp across the order's source rows.",
+    },
+}
+
+SELECT
+    f.order_id,
+    f.order_timestamp,
+    f.customer_id,
+    c.country,
+    SUM(f.line_amount) AS order_total_amount,
+    COUNT(*)           AS number_of_items,
+    MAX(f.loaded_at)   AS loaded_at
+FROM
+    ${ref("fact_order_items")} AS f
+LEFT JOIN
+    ${ref("dim_customers")} AS c ON c.customer_id = f.customer_id
+GROUP BY
+    f.order_id,
+    f.order_timestamp,
+    f.customer_id,
+    c.country

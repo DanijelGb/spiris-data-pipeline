@@ -1,0 +1,25 @@
+config {
+    type: "table",
+    schema: "staging",
+    tags: ["staging"],
+    table: "products_cleaned",
+    description: "Cleaned products: typed columns, trimmed values, deduplicated on product_id.",
+    columns: {
+        product_id: "Unique product identifier (primary key).",
+        category: "Product category.",
+        product_name: "Product display name.",
+        loaded_at: "UTC timestamp when the row was loaded into raw.",
+    },
+}
+
+SELECT
+    CAST(TRIM(product_id) AS STRING)   AS product_id,
+    NULLIF(TRIM(category), '')         AS category,
+    NULLIF(TRIM(product_name), '')     AS product_name,
+    loaded_at
+FROM
+    ${ref("products")}
+WHERE
+    product_id IS NOT NULL
+QUALIFY
+    ROW_NUMBER() OVER (PARTITION BY TRIM(product_id) ORDER BY product_name) = 1

@@ -1,0 +1,35 @@
+config {
+    type: "table",
+    schema: "analytics",
+    tags: ["analytics"],
+    table: "fact_order_items",
+    description: "Order-item fact (one row per order line item) with order context and line amount.",
+    columns: {
+        order_id: "Order reference (degenerate dimension).",
+        product_id: "Product reference (FK -> dim_products).",
+        customer_id: "Customer reference (FK -> dim_customers).",
+        order_date: "Order date derived from order_timestamp; NULL if timestamp is invalid.",
+        order_timestamp: "Order time in UTC.",
+        order_status: "Order status: completed / cancelled / refunded.",
+        quantity: "Quantity ordered (> 0).",
+        price_per_unit: "Unit price (NUMERIC).",
+        line_amount: "quantity * price_per_unit.",
+        loaded_at: "UTC timestamp when the source row was loaded into raw.",
+    },
+}
+
+SELECT
+    oi.order_id,
+    oi.product_id,
+    o.customer_id,
+    DATE(o.order_timestamp)            AS order_date,
+    o.order_timestamp,
+    o.order_status,
+    oi.quantity,
+    oi.price_per_unit,
+    oi.quantity * oi.price_per_unit    AS line_amount,
+    oi.loaded_at
+FROM
+    ${ref("order_items_cleaned")} AS oi
+LEFT JOIN
+    ${ref("orders_cleaned")} AS o ON o.order_id = oi.order_id
