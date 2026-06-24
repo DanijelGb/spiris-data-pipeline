@@ -1,0 +1,16 @@
+config {
+    type: "assertion",
+    tags: ["assertions"],
+    description: "Surfaces customers with a missing (NULL) country for business review. Currently expected to flag C019. Checks presence, not spelling (see customers_country_is_iso for format).",
+}
+
+-- Returns customers missing a country; the assertion fails while any exist,
+-- making the gap visible without mutating the data.
+SELECT
+    customer_id,
+    signup_date,
+    loaded_at
+FROM
+    ${ref("customers_cleaned")}
+WHERE
+    country IS NULL

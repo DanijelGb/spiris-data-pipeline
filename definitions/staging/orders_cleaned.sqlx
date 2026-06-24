@@ -20,7 +20,7 @@ config {
 SELECT
     CAST(TRIM(order_id) AS STRING)    AS order_id,
     CAST(TRIM(customer_id) AS STRING) AS customer_id,
-    SAFE.PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', TRIM(order_timestamp), 'UTC') AS order_timestamp,
+    SAFE.PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', order_timestamp, 'UTC') AS order_timestamp,
     CASE
         WHEN LOWER(TRIM(order_status)) IN ('completed', 'cancelled', 'refunded')
             THEN LOWER(TRIM(order_status))
@@ -34,5 +34,5 @@ WHERE
 QUALIFY
     ROW_NUMBER() OVER (
         PARTITION BY TRIM(order_id)
-        ORDER BY SAFE.PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', TRIM(order_timestamp), 'UTC') DESC NULLS LAST
+        ORDER BY SAFE.PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', order_timestamp, 'UTC') DESC NULLS LAST
     ) = 1

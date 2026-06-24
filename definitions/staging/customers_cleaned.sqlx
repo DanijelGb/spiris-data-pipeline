@@ -4,7 +4,7 @@ config {
     tags: ["staging"],
     assertions: {
         uniqueKey: ["customer_id"],
-        nonNull: ["customer_id", "country"],
+        nonNull: ["customer_id"],
     },
     name: "customers_cleaned",
     description: "Cleaned customers: typed columns, standardized nulls, deduplicated on customer_id.",
@@ -19,7 +19,7 @@ config {
 SELECT
     CAST(TRIM(customer_id) AS STRING)                AS customer_id,
     NULLIF(TRIM(country), '')                        AS country,
-    SAFE.PARSE_DATE('%Y-%m-%d', TRIM(signup_date))   AS signup_date,
+    SAFE.PARSE_DATE('%Y-%m-%d', signup_date)   AS signup_date,
     loaded_at
 FROM
     ${ref("customers")}

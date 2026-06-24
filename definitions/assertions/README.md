@@ -17,9 +17,9 @@ For each check: **what it detects**, **what action to take when it fails**, and 
 - **On failure:** quarantine the offending rows for review; they would distort revenue.
 - **Monitoring:** scheduled assertion run; trend the count of invalid rows.
 
-## Country present (`customers_cleaned.country` not null)
+## Country present (`customers_country_present.sqlx`)
 - **Detects:** customers with a missing/blank country (e.g. `C019`).
-- **On failure:** alert and investigate with the business; do not block — handling is an open question.
+- **On failure:** alert and investigate with the business; handling is an open question.
 - **Monitoring:** scheduled assertion run; track the count of missing-country customers.
 
 ## Country is ISO (`customers_country_is_iso.sqlx`)
