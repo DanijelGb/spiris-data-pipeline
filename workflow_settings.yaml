@@ -1,0 +1,5 @@
+defaultProject: project-08bac5b8-2547-453b-a88
+defaultLocation: EU
+defaultDataset: analytics
+defaultAssertionDataset: assertions
+dataformCoreVersion: 3.0.0
