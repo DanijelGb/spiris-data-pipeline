@@ -1,10 +1,8 @@
 from google.cloud import bigquery
 
-from config import PROJECT_ID
+from config import PROJECT_ID, DATASETS
 
 client = bigquery.Client(project=PROJECT_ID)
-
-DATASETS = ["raw", "staging", "analytics", "datamart"]
 
 
 def create_datasets() -> None:
