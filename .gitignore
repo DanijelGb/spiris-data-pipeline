@@ -1,0 +1,13 @@
+data/*.csv
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Credentials
+*-key.json
+service-account*.json
+credentials*.json
