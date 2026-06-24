@@ -6,7 +6,7 @@ config {
         uniqueKey: ["product_id"],
         nonNull: ["product_id"],
     },
-    table: "dim_products",
+    name: "dim_products",
     description: "Product dimension (one row per product).",
     columns: {
         product_id: "Product natural key (primary key).",

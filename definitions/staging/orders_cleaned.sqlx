@@ -6,7 +6,7 @@ config {
         uniqueKey: ["order_id"],
         nonNull: ["order_id"],
     },
-    table: "orders_cleaned",
+    name: "orders_cleaned",
     description: "Cleaned orders: typed columns, UTC timestamps, normalized status, deduplicated on order_id.",
     columns: {
         order_id: "Unique order identifier (primary key).",

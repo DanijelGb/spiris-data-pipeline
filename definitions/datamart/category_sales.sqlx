@@ -2,7 +2,7 @@ config {
     type: "table",
     schema: "datamart",
     tags: ["datamart"],
-    table: "category_sales",
+    name: "category_sales",
     description: "One row per product category for completed orders: revenue and quantity sold.",
     columns: {
         category: "Product category.",

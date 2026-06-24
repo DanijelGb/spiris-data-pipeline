@@ -6,7 +6,7 @@ config {
         uniqueKey: ["customer_id"],
         nonNull: ["customer_id"],
     },
-    table: "dim_customers",
+    name: "dim_customers",
     description: "Customer dimension (one row per customer).",
     columns: {
         customer_id: "Customer natural key (primary key).",

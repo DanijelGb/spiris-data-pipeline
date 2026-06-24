@@ -6,7 +6,7 @@ config {
         uniqueKey: ["product_id"],
         nonNull: ["product_id"],
     },
-    table: "products_cleaned",
+    name: "products_cleaned",
     description: "Cleaned products: typed columns, trimmed values, deduplicated on product_id.",
     columns: {
         product_id: "Unique product identifier (primary key).",

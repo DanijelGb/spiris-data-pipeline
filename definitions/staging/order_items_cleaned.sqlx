@@ -9,7 +9,7 @@ config {
             "price_per_unit > 0",
         ],
     },
-    table: "order_items_cleaned",
+    name: "order_items_cleaned",
     description: "Cleaned order items: typed columns, invalid quantities (<= 0) removed.",
     columns: {
         order_id: "Order reference (FK -> orders_cleaned).",
