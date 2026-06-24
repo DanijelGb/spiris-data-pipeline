@@ -2,6 +2,10 @@ config {
     type: "table",
     schema: "analytics",
     tags: ["analytics"],
+    assertions: {
+        uniqueKey: ["customer_id"],
+        nonNull: ["customer_id"],
+    },
     table: "dim_customers",
     description: "Customer dimension (one row per customer).",
     columns: {

@@ -2,6 +2,10 @@ config {
     type: "table",
     schema: "staging",
     tags: ["staging"],
+    assertions: {
+        uniqueKey: ["product_id"],
+        nonNull: ["product_id"],
+    },
     table: "products_cleaned",
     description: "Cleaned products: typed columns, trimmed values, deduplicated on product_id.",
     columns: {

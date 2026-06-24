@@ -2,6 +2,13 @@ config {
     type: "table",
     schema: "staging",
     tags: ["staging"],
+    assertions: {
+        nonNull: ["order_id", "product_id", "quantity", "price_per_unit"],
+        rowConditions: [
+            "quantity > 0",
+            "price_per_unit > 0",
+        ],
+    },
     table: "order_items_cleaned",
     description: "Cleaned order items: typed columns, invalid quantities (<= 0) removed.",
     columns: {
@@ -25,4 +32,4 @@ WHERE
     order_id IS NOT NULL
     AND product_id IS NOT NULL
     AND SAFE_CAST(quantity AS INT64) > 0
-    AND SAFE_CAST(price_per_unit as INT64) > 0
+    AND SAFE_CAST(price_per_unit as NUMERIC) > 0
