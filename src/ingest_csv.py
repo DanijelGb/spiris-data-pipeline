@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import datetime, timezone
 
 import pandas as pd
 from google.cloud import bigquery
@@ -12,6 +13,7 @@ def load_csv(table_name: str) -> None:
     file_path = Path("data") / f"{table_name}.csv"
 
     df = pd.read_csv(file_path)
+    df["loaded_at"] = datetime.now(tz=timezone.utc)
 
     table_id = f"{client.project}.{RAW_DATASET}.{table_name}"
 

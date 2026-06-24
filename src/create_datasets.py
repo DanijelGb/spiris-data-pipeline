@@ -4,7 +4,7 @@ from config import PROJECT_ID
 
 client = bigquery.Client(project=PROJECT_ID)
 
-DATASETS = ["raw", "analytics"]
+DATASETS = ["raw", "staging", "analytics", "datamart"]
 
 
 def create_datasets() -> None:
