@@ -2,7 +2,7 @@ config {
     type: "table",
     schema: "datamart",
     tags: ["datamart"],
-    table: "daily_sales",
+    name: "daily_sales",
     description: "One row per calendar day (UTC) for completed orders: revenue, order count, and average order value.",
     columns: {
         date: "Order date (UTC).",

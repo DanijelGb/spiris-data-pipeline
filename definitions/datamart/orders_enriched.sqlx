@@ -2,7 +2,7 @@ config {
     type: "table",
     schema: "datamart",
     tags: ["datamart"],
-    table: "orders_enriched",
+    name: "orders_enriched",
     description: "One row per order, enriched with customer country and order-level metrics.",
     columns: {
         order_id: "Unique order identifier.",
