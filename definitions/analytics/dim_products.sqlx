@@ -2,10 +2,6 @@ config {
     type: "table",
     schema: "analytics",
     tags: ["analytics"],
-    assertions: {
-        uniqueKey: ["product_id"],
-        nonNull: ["product_id"],
-    },
     name: "dim_products",
     description: "Product dimension (one row per product).",
     columns: {

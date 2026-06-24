@@ -1,0 +1,29 @@
+config {
+    type: "assertion",
+    tags: ["assertions", "source"],
+    description: "Source-data check on raw.customers: surfaces rows that the staging clean step would silently drop — null customer_id (removed by the WHERE filter) and duplicate customer_id (collapsed by the dedup). Makes incoming data loss observable.",
+}
+
+-- Each offending raw row is returned with the reason it would be dropped.
+-- The assertion passes only when this set is empty.
+SELECT
+    CAST(customer_id AS STRING) AS key_value,
+    'null_key' AS issue
+FROM
+    ${ref("customers")}
+WHERE
+    customer_id IS NULL
+
+UNION ALL
+
+SELECT
+    CAST(customer_id AS STRING) AS key_value,
+    'duplicate_key' AS issue
+FROM
+    ${ref("customers")}
+WHERE
+    customer_id IS NOT NULL
+GROUP BY
+    customer_id
+HAVING
+    COUNT(*) > 1

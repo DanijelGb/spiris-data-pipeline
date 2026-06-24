@@ -1,0 +1,23 @@
+config {
+    type: "assertion",
+    tags: ["assertions", "source"],
+    description: "Source-data check on raw.order_items: surfaces rows the staging clean step would silently discard for non-positive measures — quantity <= 0 or price_per_unit <= 0 (the WHERE filter keeps only > 0). Note this includes zero, not just negatives, since the clean step drops both. Makes incoming data loss observable.",
+}
+
+-- Each discarded raw row is returned with the reason it would be dropped.
+-- The assertion passes only when this set is empty.
+SELECT
+    CAST(order_id AS STRING) AS order_id,
+    CAST(product_id AS STRING) AS product_id,
+    quantity,
+    price_per_unit,
+    CASE
+        WHEN SAFE_CAST(quantity AS INT64) <= 0 AND SAFE_CAST(price_per_unit AS NUMERIC) <= 0 THEN 'non_positive_quantity_and_price'
+        WHEN SAFE_CAST(quantity AS INT64) <= 0 THEN 'non_positive_quantity'
+        ELSE 'non_positive_price'
+    END AS issue
+FROM
+    ${ref("order_items")}
+WHERE
+    SAFE_CAST(quantity AS INT64) <= 0
+    OR SAFE_CAST(price_per_unit AS NUMERIC) <= 0

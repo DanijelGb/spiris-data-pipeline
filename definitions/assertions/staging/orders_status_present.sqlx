@@ -1,0 +1,16 @@
+config {
+    type: "assertion",
+    tags: ["assertions"],
+    description: "Surfaces orders with a missing (NULL) order_status in orders_cleaned. Status is NULL when the source value was blank or not one of the recognized values (completed/cancelled/refunded).",
+}
+
+-- Returns orders missing a status; the assertion fails while any exist.
+SELECT
+    order_id,
+    order_timestamp,
+    customer_id,
+    loaded_at
+FROM
+    ${ref("orders_cleaned")}
+WHERE
+    order_status IS NULL

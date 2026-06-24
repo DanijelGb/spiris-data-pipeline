@@ -1,0 +1,15 @@
+config {
+    type: "assertion",
+    tags: ["assertions"],
+    description: "Surfaces customers with a NULL signup_date in customers_cleaned. signup_date is NULL when the source value was missing or unparseable (SAFE_CAST returned NULL).",
+}
+
+-- Returns customers missing a signup_date; the assertion fails while any exist.
+SELECT
+    customer_id,
+    country,
+    loaded_at
+FROM
+    ${ref("customers_cleaned")}
+WHERE
+    signup_date IS NULL

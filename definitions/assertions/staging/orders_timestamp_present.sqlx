@@ -1,0 +1,16 @@
+config {
+    type: "assertion",
+    tags: ["assertions"],
+    description: "Surfaces orders with a NULL order_timestamp in orders_cleaned. Timestamp is NULL when the source value was missing or unparseable (SAFE_CAST returned NULL). Such orders cannot be placed on the time axis of the marts.",
+}
+
+-- Returns orders missing a timestamp; the assertion fails while any exist.
+SELECT
+    order_id,
+    customer_id,
+    order_status,
+    loaded_at
+FROM
+    ${ref("orders_cleaned")}
+WHERE
+    order_timestamp IS NULL

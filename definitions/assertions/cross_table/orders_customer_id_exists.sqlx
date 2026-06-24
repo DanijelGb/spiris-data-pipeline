@@ -1,0 +1,20 @@
+config {
+    type: "assertion",
+    tags: ["assertions"],
+    description: "Referential integrity: surfaces orders whose customer_id is not present in customers_cleaned (orphaned foreign key). NULL customer_id is ignored here (covered separately), since a missing key is a different problem from an unmatched one.",
+}
+
+-- Returns orders referencing a customer that does not exist in the dimension.
+-- The assertion passes only when this set is empty.
+SELECT
+    o.order_id,
+    o.customer_id,
+    o.order_timestamp,
+    o.loaded_at
+FROM
+    ${ref("orders_cleaned")} AS o
+LEFT JOIN
+    ${ref("customers_cleaned")} AS c ON c.customer_id = o.customer_id
+WHERE
+    o.customer_id IS NOT NULL
+    AND c.customer_id IS NULL

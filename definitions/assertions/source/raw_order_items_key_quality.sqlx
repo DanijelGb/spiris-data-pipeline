@@ -1,0 +1,17 @@
+config {
+    type: "assertion",
+    tags: ["assertions", "source"],
+    description: "Source-data check on raw.order_items: surfaces line items the staging clean step would silently drop — null order_id or product_id (removed by the not-null filter). order_items has no single primary key, so only the foreign keys are checked. Makes incoming data loss observable.",
+}
+
+-- Each offending raw row is returned with the reason it would be dropped.
+-- The assertion passes only when this set is empty.
+SELECT
+    CAST(order_id AS STRING) AS order_id,
+    CAST(product_id AS STRING) AS product_id,
+    'null_key' AS issue
+FROM
+    ${ref("order_items")}
+WHERE
+    order_id IS NULL
+    OR product_id IS NULL

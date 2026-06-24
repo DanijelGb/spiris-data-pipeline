@@ -1,0 +1,19 @@
+config {
+    type: "assertion",
+    tags: ["assertions"],
+    description: "Referential integrity: surfaces line items whose product_id is not present in products_cleaned (orphaned foreign key). NULL product_id is ignored here (covered separately), since a missing key is a different problem from an unmatched one.",
+}
+
+-- Returns line items referencing a product that does not exist in the dimension.
+-- The assertion passes only when this set is empty.
+SELECT
+    oi.order_id,
+    oi.product_id,
+    oi.loaded_at
+FROM
+    ${ref("order_items_cleaned")} AS oi
+LEFT JOIN
+    ${ref("products_cleaned")} AS p ON p.product_id = oi.product_id
+WHERE
+    oi.product_id IS NOT NULL
+    AND p.product_id IS NULL
