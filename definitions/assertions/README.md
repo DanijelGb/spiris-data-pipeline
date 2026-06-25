@@ -43,9 +43,9 @@ PK invariants are asserted once, at staging (`customers_cleaned`, `products_clea
 - **Monitoring:** scheduled assertion run with alerting; dashboard the null rate per column.
 
 ### Positive quantity and price (`quantity > 0`, `price_per_unit > 0`)
-- **Detects:** zero or negative quantities/prices in `order_items_cleaned`.
-- **On failure:** quarantine the offending rows for review; they would distort revenue.
-- **Monitoring:** scheduled assertion run; trend the count of invalid rows.
+- **Detects:** zero or negative quantities/prices in `order_items_cleaned`. This is a **redundant backstop**: the staging step already drops non-positive rows in its `WHERE` filter, so on clean data this check passes by construction. It guards against a future regression in that filter; the primary detection of discarded rows lives in the source check `raw_order_items_non_positive_measures`.
+- **On failure:** the staging filter has regressed (it should have removed these rows) — fix the cleaning logic. Non-positive measures would otherwise distort revenue.
+- **Monitoring:** scheduled assertion run; a non-zero count signals a staging-filter regression rather than a new source issue.
 
 ### Order status present (`orders_status_present.sqlx`)
 - **Detects:** orders in `orders_cleaned` with a NULL `order_status` (blank in source, or a value not in completed/cancelled/refunded that the clean step mapped to NULL).
